@@ -10,11 +10,11 @@ Easily register your own menu action with **Mache**
 ```cs
 Mache.RegisterMod(() => new ModDetails
 {
-	Name		= "Example Mod",
-	Id 			= "your.unique.mod.id",
-	Version		= "1.0.0",
-	Description	= "Lorem ipsum dolor sit amet...",
-	OnMenuShow	= () => Log("Player clicked the 'Open Settings' button for your mod")
+	Name = "Example Mod",
+	Id = "your.unique.mod.id",
+	Version = "1.0.0",
+	Description = "Lorem ipsum dolor sit amet...",
+	OnMenuShow = () => Log("Player clicked the 'Open Settings' button for your mod")
 });
 ```
 

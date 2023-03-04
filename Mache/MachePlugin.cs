@@ -27,7 +27,7 @@ namespace Mache
     {
         public const string ModId = "com.willis.sotf.mache";
         public const string ModName = "Mache";
-        public const string Version = "0.0.1";
+        public const string Version = "0.0.3";
 
         internal static MachePlugin Instance { get; private set; }
 
@@ -115,7 +115,7 @@ namespace Mache
                 Id = MachePlugin.ModId,
                 Version = MachePlugin.Version,
                 Description = description,
-                OnMenuShow = () => { MachePlugin.Instance.Log.LogInfo("Opening Mache menu!"); }
+                //OnMenuShow = () => { MachePlugin.Instance.Log.LogInfo("Opening Mache menu!"); }
             });
         }
 

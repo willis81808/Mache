@@ -18,6 +18,7 @@ using Mache.Utils;
 using System;
 using System.IO;
 using System.Text;
+using Sons.Input;
 
 namespace Mache
 {
@@ -27,7 +28,7 @@ namespace Mache
     {
         public const string ModId = "com.willis.sotf.mache";
         public const string ModName = "Mache";
-        public const string Version = "0.0.3";
+        public const string Version = "0.0.5";
 
         internal static MachePlugin Instance { get; private set; }
 
@@ -70,8 +71,8 @@ namespace Mache
         {
             UniverseLib.Config.UniverseLibConfig config = new UniverseLib.Config.UniverseLibConfig()
             {
-                Disable_EventSystem_Override = true,
-                Force_Unlock_Mouse = true,
+                Disable_EventSystem_Override = false,
+                Force_Unlock_Mouse = false,
                 Unhollowed_Modules_Folder = Path.Combine(Paths.BepInExRootPath, "interop")
             };
 

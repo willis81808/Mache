@@ -1,10 +1,15 @@
-﻿using Sons.Items.Core;
+﻿using Mache.Networking;
+using Sons.Gui;
+using Sons.Input;
+using Sons.Items.Core;
+using Sons.Save;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TheForest.Modding.Bridge;
+using TheForest.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 using UniverseLib.UI;
@@ -25,6 +30,8 @@ namespace Mache.UI
 
         internal static GameObject ModCategoryView { get; private set; }
         internal static GameObject ModDetailsView { get; private set; }
+
+        internal bool IsActive { get; private set; }
 
         private static Dictionary<string, ModDetails> registeredModDetails = new Dictionary<string, ModDetails>();
 
@@ -90,9 +97,22 @@ namespace Mache.UI
             UIFactory.SetLayoutElement(modDetails, flexibleWidth: 9999);
             ModDetailsView = modDetails;
 
-            Canvas.ForceUpdateCanvases();
-
             SetActive(false);
+        }
+
+        public override void SetActive(bool active)
+        {
+            base.SetActive(active);
+
+            if (active == IsActive) return;
+            IsActive = active;
+
+            MachePlugin.Instance.Log.LogInfo("Mache Overlay " + (active ? "OPENED" : "CLOSED"));
+
+            if (LocalPlayer.IsInWorld && !PauseMenu.IsActive && PauseMenu._instance.CanBeOpened() && IsActive)
+            {
+                PauseMenu._instance.Open();
+            }
         }
     }
 }

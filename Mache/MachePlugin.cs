@@ -21,6 +21,8 @@ using System.Text;
 using Sons.Input;
 using Mache.Networking;
 using TheForest.Utils;
+using BepInEx.Configuration;
+using Il2CppInterop.Runtime.Injection;
 
 namespace Mache
 {
@@ -30,7 +32,7 @@ namespace Mache
     {
         public const string ModId = "com.willis.sotf.mache";
         public const string ModName = "Mache";
-        public const string Version = "0.0.6";
+        public const string Version = "0.1.0";
 
         internal static MachePlugin Instance { get; private set; }
 
@@ -49,6 +51,7 @@ namespace Mache
         private static List<Func<ModDetails>> pendingModRegistrations = new List<Func<ModDetails>>();
         private static bool overlayReady = false;
 
+        internal ConfigEntry<KeyCode> openMenuKeybind;
 
         public static void RegisterMod(Func<ModDetails> detailsProvider)
         {
@@ -63,6 +66,8 @@ namespace Mache
 
         public void Awake()
         {
+            openMenuKeybind = MachePlugin.Instance.Config.Bind(MachePlugin.ModId, "MacheOpenMenuKeybind", KeyCode.F1, "Keybind for opening the Mache Mod Menu");
+
             // initialize UniverseLib
             UniverseLib.Config.UniverseLibConfig config = new UniverseLib.Config.UniverseLibConfig()
             {
@@ -98,8 +103,28 @@ namespace Mache
                 Id = MachePlugin.ModId,
                 Version = MachePlugin.Version,
                 Description = description,
-                //OnMenuShow = () => { MachePlugin.Instance.Log.LogInfo("Opening Mache menu!"); }
+                OnFinishedCreating = CreateMenuSettings
             });
+        }
+
+        private void CreateMenuSettings(GameObject parent)
+        {
+            MenuPanel.Builder()
+                .AddComponent(new DropdownComponent
+                {
+                    Title = "Open Menu Keybind",
+                    DefaultValue = openMenuKeybind.Value.ToString(),
+                    DefaultOptions = Enum.GetNames(typeof(KeyCode)),
+                    DropdownHeight = 300,
+                    OnValueChanged = OnKeybindDropdownChanged
+                })
+                .BuildToTarget(parent);
+        }
+
+        private void OnKeybindDropdownChanged(DropdownComponent self, int val)
+        {
+            var keycode = ((KeyCode[])Enum.GetValues(typeof(KeyCode)))[val];
+            openMenuKeybind.Value = keycode;
         }
 
         private void RegisterEvents()
@@ -110,7 +135,7 @@ namespace Mache
 
         public void Update()
         {
-            if (Input.GetKeyDown(KeyCode.F1))
+            if (Input.GetKeyDown(openMenuKeybind.Value))
             {
                 Overlay.Toggle();
             }

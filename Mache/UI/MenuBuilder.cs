@@ -194,6 +194,7 @@ namespace Mache.UI
     {
         public string Title { private get; set; } = null;
         public string Placeholder { private get; set; } = "";
+        public int LabelFontSize { private get; set; } = 14;
         public Action<InputComponent, string> OnInputChanged { private get; set; } = null;
 
         public Text LabelObject { get; private set; }
@@ -206,7 +207,7 @@ namespace Mache.UI
 
             if (Title != null)
             {
-                LabelObject = UIFactory.CreateLabel(inputHolder, "input_label", Title);
+                LabelObject = UIFactory.CreateLabel(inputHolder, "input_label", Title, fontSize: LabelFontSize);
                 UIFactory.SetLayoutElement(LabelObject.gameObject, minHeight: 30);
             }
 
@@ -244,6 +245,47 @@ namespace Mache.UI
             ToggleObject.onValueChanged.AddListener((val) => OnValueChanged?.Invoke(this, val));
 
             return toggleHolder;
+        }
+    }
+
+    public class DropdownComponent : MenuComponent
+    {
+        public string Title { private get; set; } = null;
+        public string DefaultValue { private get; set; } = "Default";
+        public string[] DefaultOptions { private get; set; } = new[] { "Option 1", "Option 2", "Option 3" };
+        public int LabelFontSize { private get; set; } = 14;
+        public int OptionFontSize { private get; set; } = 14;
+        public int DropdownHeight { private get; set; } = 150;
+        public Action<DropdownComponent, int> OnValueChanged { private get; set; }
+
+        public Text LabelObject { get; private set; }
+        public Dropdown DropdownObject { get; private set; }
+
+        public override GameObject Construct(GameObject root)
+        {
+            var dropdownHolder = UIFactory.CreateVerticalGroup(root, "dropdown_holder", true, false, true, true);
+            UIFactory.SetLayoutElement(dropdownHolder, minHeight: Title != null ? 60 : 30);
+
+            if (Title != null)
+            {
+                LabelObject = UIFactory.CreateLabel(dropdownHolder, "slider_label", Title, fontSize: LabelFontSize);
+                UIFactory.SetLayoutElement(LabelObject.gameObject, minHeight: 30);
+            }
+
+            var dropdownObj = UIFactory.CreateDropdown(dropdownHolder, "dropdown", out var dropdown, DefaultValue, OptionFontSize, val => OnValueChanged?.Invoke(this, val), DefaultOptions);
+            UIFactory.SetLayoutElement(dropdownObj, minHeight: 30);
+            DropdownObject = dropdown;
+
+            int defaultIndex = 0;
+            for (int i = 0; i < DefaultOptions.Length; i++)
+            {
+                if (DefaultValue == DefaultOptions[i]) defaultIndex = i;
+            }
+            DropdownObject.SetValueWithoutNotify(defaultIndex);
+
+            DropdownObject.transform.GetChild(2).GetComponent<RectTransform>().sizeDelta = new Vector3(0, DropdownHeight);
+
+            return dropdownHolder;
         }
     }
 }

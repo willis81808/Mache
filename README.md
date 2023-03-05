@@ -6,7 +6,42 @@ Mache is a modding framework designed for Sons of the Forest. As a utility it pr
 Press `F1` to open the **Mache** mod menu
 
 # Modding API
-Easily register your own menu action with **Mache**
+
+## Mod Menu
+Easily register your own menu with **Mache**
+
+### Integrated Menu
+You can implement interactable UI elements directly into the Mache menu for your mod! When registering your mod, Mache provides an `OnFinishedCreating` event that is executed when your mod's panel is fully initialized and ready to accept additional elements.
+Using the `GameObject` passed to this callback as the parent for your own UI elements will incorporate them into the existing scroll view of your mod's panel in the Mache menu. For example:
+```cs
+Mache.RegisterMod(() => new ModDetails
+{
+    Name = "Example Mod",
+    Id = "your.unique.mod.id",
+    Version = "1.0.0",
+    Description = "Lorem ipsum dolor sit amet...",
+    OnFinishedCreating = (parent) =>
+    {
+        MenuPanel.Builder()
+            .AddComponent(new LabelComponent
+            {
+                Text = "Hello World!",
+                FontSize = 24
+            })
+            .AddComponent(new ButtonComponent
+            {
+                Text = "Press Me",
+                OnClick = (self) => MachePlugin.Instance.Log.LogMessage("Down the rabbit hole...")
+            })
+            .BuildToTarget(parent);
+    }
+});
+```
+
+### Custom/Standalone Menu
+If you provide a value for `OnMenuShow` when registering your mod Mache will only display the given name, version, and description in its own window.
+Instead of placing options there it will create an "Open Settings" button that, when clicked, will execute your `OnMenuShow` callback.
+This is intended for use when you want to have a totally independent and fully self-managed menu. It is up to you how your mod responds when the user clicks this button.   
 ```cs
 Mache.RegisterMod(() => new ModDetails
 {

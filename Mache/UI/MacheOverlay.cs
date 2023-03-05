@@ -1,4 +1,6 @@
-﻿using Mache.Networking;
+﻿using BepInEx.Configuration;
+using Mache.Networking;
+using Mache.Utils;
 using Sons.Gui;
 using Sons.Input;
 using Sons.Items.Core;
@@ -19,8 +21,6 @@ namespace Mache.UI
 {
     public sealed class MacheOverlay : UniverseLib.UI.Panels.PanelBase
     {
-        public MacheOverlay(UIBase owner) : base(owner) { }
-
         public override string Name => "Mod Settings";
         public override int MinWidth => 1000;
         public override int MinHeight => 500;
@@ -34,6 +34,13 @@ namespace Mache.UI
         internal bool IsActive { get; private set; }
 
         private static Dictionary<string, ModDetails> registeredModDetails = new Dictionary<string, ModDetails>();
+
+        private Vector2Config MenuPosition = null;
+
+        public MacheOverlay(UIBase owner) : base(owner)
+        {
+            MenuPosition = MachePlugin.Instance.Config.Vector2Config(MachePlugin.ModId, "MacheOverlayPosition", "Stored position of Mache overlay window", new Vector2(0 - (MinWidth / 2f), MinHeight / 2f));
+        }
 
         internal void RegisterMod(ModDetails details)
         {
@@ -77,6 +84,8 @@ namespace Mache.UI
                 }
             };
 
+            details.OnFinishedCreating?.Invoke(detailsContent);
+
             details.DetailsView.SetActive(false);
         }
 
@@ -100,14 +109,26 @@ namespace Mache.UI
             SetActive(false);
         }
 
+        public override void OnFinishDrag()
+        {
+            base.OnFinishDrag();
+            MenuPosition.Value = UIRoot.transform.localPosition;
+        }
+
+        protected override void LateConstructUI()
+        {
+            base.LateConstructUI();
+
+            UIRoot.transform.localPosition = MenuPosition.Value;
+            EnsureValidPosition();
+        }
+
         public override void SetActive(bool active)
         {
             base.SetActive(active);
 
             if (active == IsActive) return;
             IsActive = active;
-
-            MachePlugin.Instance.Log.LogInfo("Mache Overlay " + (active ? "OPENED" : "CLOSED"));
 
             if (LocalPlayer.IsInWorld && !PauseMenu.IsActive && PauseMenu._instance.CanBeOpened() && IsActive)
             {

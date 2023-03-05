@@ -475,6 +475,8 @@
     <Compile Include="Networking\SimpleEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\MacheOverlay.cs" />
+    <Compile Include="UI\MenuBuilder.cs" />
+    <Compile Include="Utils\ConfigExtensions.cs" />
     <Compile Include="Utils\GameItem.cs" />
   </ItemGroup>
   <ItemGroup>

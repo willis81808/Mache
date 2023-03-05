@@ -16,6 +16,8 @@ namespace Mache
         public Action OnMenuShow { get; set; }
         public Action OnMenuHide { get; set; }
 
+        public Action<GameObject> OnFinishedCreating { get; set; }
+
         internal GameObject DetailsView { get; set; }
     }
 }

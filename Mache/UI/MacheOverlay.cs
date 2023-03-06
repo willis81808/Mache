@@ -33,7 +33,7 @@ namespace Mache.UI
 
         internal bool IsActive { get; private set; }
 
-        private static Dictionary<string, ModDetails> registeredModDetails = new Dictionary<string, ModDetails>();
+        public static Dictionary<string, ModDetails> registeredModDetails = new Dictionary<string, ModDetails>();
 
         private Vector2Config MenuPosition = null;
 

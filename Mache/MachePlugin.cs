@@ -184,16 +184,6 @@ namespace Mache
             }
         }
 
-        public static void SetOverlayActive(bool active)
-        {
-            Overlay.SetActive(active);
-        }
-
-        public static void SetOverlayActiveMod(string modId)
-        {
-            Overlay.EnableDetailsFor(modId);
-        }
-
         public static IEnumerable<T> FindObjectsOfType<T>() where T : Component
         {
             return GameObject.FindObjectsOfType(Il2CppType.Of<T>()).Select(i => i.Cast<T>());

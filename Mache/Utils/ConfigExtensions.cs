@@ -18,6 +18,10 @@ namespace Mache.Utils
         {
             return new Vector3Config(config, modId, configName, configDescription, defaultValue);
         }
+        public static Vector4Config Vector4Config(this ConfigFile config, string modId, string configName, string configDescription, Vector4 defaultValue)
+        {
+            return new Vector4Config(config, modId, configName, configDescription, defaultValue);
+        }
         public static RectConfig RectConfig(this ConfigFile config, string modId, string configName, string configDescription, Rect defaultValue)
         {
             return new RectConfig(config, modId, configName, configDescription, defaultValue);
@@ -72,6 +76,36 @@ namespace Mache.Utils
             _positionX = config.Bind(modId, configName + "_X", defaultValue.x, configDescription);
             _positionY = config.Bind(modId, configName + "_Y", defaultValue.y, configDescription);
             _positionZ = config.Bind(modId, configName + "_Z", defaultValue.z, configDescription);
+        }
+    }
+
+    public class Vector4Config
+    {
+        private ConfigEntry<float> _positionX;
+        private ConfigEntry<float> _positionY;
+        private ConfigEntry<float> _positionZ;
+        private ConfigEntry<float> _positionW;
+        public Vector4 Value
+        {
+            get
+            {
+                return new Vector4(_positionX.Value, _positionY.Value, _positionZ.Value, _positionW.Value);
+            }
+            set
+            {
+                _positionX.Value = value.x;
+                _positionY.Value = value.y;
+                _positionZ.Value = value.z;
+                _positionW.Value = value.w;
+            }
+        }
+
+        public Vector4Config(ConfigFile config, string modId, string configName, string configDescription, Vector4 defaultValue)
+        {
+            _positionX = config.Bind(modId, configName + "_X", defaultValue.x, configDescription);
+            _positionY = config.Bind(modId, configName + "_Y", defaultValue.y, configDescription);
+            _positionZ = config.Bind(modId, configName + "_Z", defaultValue.z, configDescription);
+            _positionW = config.Bind(modId, configName + "_W", defaultValue.z, configDescription);
         }
     }
 

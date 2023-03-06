@@ -32,14 +32,18 @@ namespace Mache.UI
         internal static GameObject ModDetailsView { get; private set; }
 
         internal bool IsActive { get; private set; }
+        private bool initializing = true;
 
         private static Dictionary<string, ModDetails> registeredModDetails = new Dictionary<string, ModDetails>();
 
-        private Vector2Config MenuPosition = null;
+        private ConfigEntry<string> LastShownMenu = MachePlugin.Instance.Config.Bind(MachePlugin.ModId, "MacheOverlayLastMenu", MachePlugin.ModId, "ID of the last menu displayed");
+        private Vector2Config MenuPositionConfig = null;
+        private Vector4Config MenuAnchorsConfig = null;
 
         public MacheOverlay(UIBase owner) : base(owner)
         {
-            MenuPosition = MachePlugin.Instance.Config.Vector2Config(MachePlugin.ModId, "MacheOverlayPosition", "Stored position of Mache overlay window", new Vector2(0 - (MinWidth / 2f), MinHeight / 2f));
+            MenuPositionConfig = MachePlugin.Instance.Config.Vector2Config(MachePlugin.ModId, "MacheOverlayPosition", "Stored position of Mache overlay window", new Vector2(0 - (MinWidth / 2f), MinHeight / 2f));
+            MenuAnchorsConfig = MachePlugin.Instance.Config.Vector4Config(MachePlugin.ModId, "MacheOverlayAnchors", "Stored overlay anchor data", Vector4.zero);
         }
 
         internal void RegisterMod(ModDetails details)
@@ -85,10 +89,20 @@ namespace Mache.UI
 
         internal void EnableDetailsFor(string modId)
         {
+            string modIdToSet = MachePlugin.ModId;
             foreach (var d in registeredModDetails.Values)
             {
-                d.DetailsView.SetActive(d.Id == modId);
+                if (d.Id == modId)
+                {
+                    modIdToSet = modId;
+                }
+                else
+                {
+                    d.DetailsView.SetActive(false);
+                }
             }
+            registeredModDetails[modIdToSet].DetailsView.SetActive(true);
+            LastShownMenu.Value = modIdToSet;
         }
 
         protected override void ConstructPanelContent()
@@ -111,18 +125,50 @@ namespace Mache.UI
             SetActive(false);
         }
 
+        public override void OnFinishResize()
+        {
+            base.OnFinishResize();
+            SaveState();
+        }
+
         public override void OnFinishDrag()
         {
             base.OnFinishDrag();
-            MenuPosition.Value = UIRoot.transform.localPosition;
+            SaveState();
+        }
+
+        private void SaveState()
+        {
+            if (initializing || Rect == null || MenuPositionConfig == null || MenuAnchorsConfig == null) return;
+            
+            MenuPositionConfig.Value = UIRoot.transform.localPosition;
+
+            var min = Rect.anchorMin;
+            var max = Rect.anchorMax;
+            MenuAnchorsConfig.Value = new Vector4(min.x, min.y, max.x, max.y);
+        }
+
+        public void ApplySavedState()
+        {
+            var anchors = MenuAnchorsConfig.Value;
+            Rect.anchorMin = new Vector2(anchors.x, anchors.y);
+            Rect.anchorMax = new Vector2(anchors.z, anchors.w);
+            MachePlugin.Instance.Log.LogInfo("Applying save state anchors: " + anchors.ToString());
+
+            UIRoot.transform.localPosition = MenuPositionConfig.Value;
+            MachePlugin.Instance.Log.LogInfo("Applying save state position: " + MenuPositionConfig.Value.ToString());
+
+            EnsureValidPosition();
+            EnsureValidSize();
+
+            EnableDetailsFor(LastShownMenu.Value);
         }
 
         protected override void LateConstructUI()
         {
             base.LateConstructUI();
-
-            UIRoot.transform.localPosition = MenuPosition.Value;
-            EnsureValidPosition();
+            ApplySavedState();
+            initializing = false;
         }
 
         public override void SetActive(bool active)

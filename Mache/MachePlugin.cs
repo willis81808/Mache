@@ -33,7 +33,7 @@ namespace Mache
     {
         public const string ModId = "com.willis.sotf.mache";
         public const string ModName = "Mache";
-        public const string Version = "0.1.1";
+        public const string Version = "0.1.2";
 
         internal static MachePlugin Instance { get; private set; }
 

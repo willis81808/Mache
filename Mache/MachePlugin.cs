@@ -188,6 +188,11 @@ namespace Mache
         {
             Overlay.SetActive(active);
         }
+        
+        public static bool GetOverlayActive()
+        {
+            return Overlay.IsActive;
+        }
 
         public static void SetOverlayActiveMod(string modId)
         {

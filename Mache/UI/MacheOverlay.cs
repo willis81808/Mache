@@ -89,6 +89,14 @@ namespace Mache.UI
             details.DetailsView.SetActive(false);
         }
 
+        internal void EnableDetailsFor(string modId)
+        {
+            foreach (var d in registeredModDetails.Values)
+            {
+                d.DetailsView.SetActive(d.Id == modId);
+            }
+        }
+
         protected override void ConstructPanelContent()
         {
             UIFactory.SetLayoutGroup<VerticalLayoutGroup>(ContentRoot, true, false, true, true);

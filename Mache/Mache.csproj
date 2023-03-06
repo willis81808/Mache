@@ -58,6 +58,17 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\AppData\Roaming\Thunderstore Mod Manager\DataFolder\SonsOfTheForest\profiles\Testing\BepInEx\interop\bolt.user.dll</HintPath>
     </Reference>
+    <Reference Include="Endnight, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\AppData\Roaming\Thunderstore Mod Manager\DataFolder\SonsOfTheForest\profiles\Testing\BepInEx\interop\Endnight.dll</HintPath>
+    </Reference>
+    <Reference Include="Endnight.Backtrace">
+      <HintPath>..\..\..\..\AppData\Roaming\Thunderstore Mod Manager\DataFolder\SonsOfTheForest\profiles\Testing\BepInEx\interop\Endnight.Backtrace.dll</HintPath>
+    </Reference>
+    <Reference Include="Endnight.Localization, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\AppData\Roaming\Thunderstore Mod Manager\DataFolder\SonsOfTheForest\profiles\Testing\BepInEx\interop\Endnight.Localization.dll</HintPath>
+    </Reference>
     <Reference Include="Il2CppInterop.Common">
       <HintPath>..\..\..\..\AppData\Roaming\Thunderstore Mod Manager\DataFolder\SonsOfTheForest\profiles\Testing\BepInEx\core\Il2CppInterop.Common.dll</HintPath>
     </Reference>
@@ -483,6 +494,9 @@
     <PackageReference Include="System.Text.Json">
       <Version>8.0.0-preview.1.23110.8</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Patches\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -23,6 +23,7 @@ using Mache.Networking;
 using TheForest.Utils;
 using BepInEx.Configuration;
 using Il2CppInterop.Runtime.Injection;
+using Endnight.Types;
 
 namespace Mache
 {
@@ -32,12 +33,15 @@ namespace Mache
     {
         public const string ModId = "com.willis.sotf.mache";
         public const string ModName = "Mache";
-        public const string Version = "0.1.0";
+        public const string Version = "0.1.1";
 
         internal static MachePlugin Instance { get; private set; }
 
         public override void Load()
         {
+            var harmony = new HarmonyLib.Harmony(ModId);
+            harmony.PatchAll(typeof(MachePlugin).Assembly);
+
             Instance = this;
             AddComponent<Mache>();
             AddComponent<MacheGlobalEventListener>();
@@ -71,9 +75,10 @@ namespace Mache
             // initialize UniverseLib
             UniverseLib.Config.UniverseLibConfig config = new UniverseLib.Config.UniverseLibConfig()
             {
-                Disable_EventSystem_Override = false,
+                Allow_UI_Selection_Outside_UIBase = true,
+                Disable_EventSystem_Override = true,
                 Force_Unlock_Mouse = false,
-                Unhollowed_Modules_Folder = Path.Combine(Paths.BepInExRootPath, "interop")
+                Unhollowed_Modules_Folder = Path.Combine(Paths.BepInExRootPath, "interop"),
             };
             Universe.Init(3f, UniverseInitialized, Log, config);
         }
@@ -139,6 +144,10 @@ namespace Mache
             {
                 Overlay.Toggle();
             }
+            else if (Overlay != null && Overlay.IsActive && Input.GetKeyDown(KeyCode.Escape))
+            {
+                Overlay.SetActive(false);
+            }
         }
         private void UniverseInitialized()
         {
@@ -173,6 +182,16 @@ namespace Mache
                     MachePlugin.Instance.Log.LogWarning(text);
                     break;
             }
+        }
+
+        public static void SetOverlayActive(bool active)
+        {
+            Overlay.SetActive(active);
+        }
+
+        public static void SetOverlayActiveMod(string modId)
+        {
+            Overlay.EnableDetailsFor(modId);
         }
 
         public static IEnumerable<T> FindObjectsOfType<T>() where T : Component

@@ -76,13 +76,7 @@ namespace Mache.UI
                 settingsButton.OnClick = details.OnMenuShow;
             }
             
-            categoryButton.OnClick = () =>
-            {
-                foreach (var d in registeredModDetails.Values)
-                {
-                    d.DetailsView.SetActive(d == details);
-                }
-            };
+            categoryButton.OnClick = () => EnableDetailsFor(details.Id);
 
             details.OnFinishedCreating?.Invoke(detailsContent);
 

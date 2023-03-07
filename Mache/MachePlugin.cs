@@ -135,20 +135,7 @@ namespace Mache
         private void RegisterEvents()
         {
             //EventDispatcher.RegisterEvent(TestEvent.Id, TestEvent.Serialize, TestEvent.Deserialize, TestEvent.OnReceived);
-            EventDispatcher.RegisterEvent<HudNoticeEvent>();
-        }
-        public class HudNoticeEvent : SimpleEvent<HudNoticeEvent>
-        {
-            public static string Id { get; } = "Some.Unique.Event.Identifier";
-
-            public string Message { get; set; }
-            public float Duration { get; set; }
-
-            // called when an event of this type has been receieved
-            public override void OnReceived()
-            {
-                HudGui.Instance.DisplayGeneralMessage(Message, Duration);
-            }
+            //EventDispatcher.RegisterEvent<HudNoticeEvent>();
         }
 
         public void Update()
@@ -160,14 +147,6 @@ namespace Mache
             else if (Overlay != null && Overlay.IsActive && Input.GetKeyDown(KeyCode.Escape))
             {
                 Overlay.SetActive(false);
-            }
-            if (Input.GetKeyDown(KeyCode.Keypad0))
-            {
-                EventDispatcher.RaiseEvent(new HudNoticeEvent
-                {
-                    Message = "Hello World!",
-                    Duration = 5f
-                });
             }
         }
         private void UniverseInitialized()

@@ -18,9 +18,9 @@ namespace Mache.Networking
             public Action<object> OnEventReceived { get; set; }
         }
 
-        public static void RegisterEvent<T>(string eventId) where T : SimpleEvent<T>
+        public static void RegisterEvent<T>() where T : SimpleEvent<T>
         {
-            RegisterEvent(eventId, SimpleEvent<T>.Serialize, SimpleEvent<T>.Deserialize, SimpleEvent<T>.OnEventRaised);
+            RegisterEvent(SimpleEvent<T>.GetEventID(), SimpleEvent<T>.Serialize, SimpleEvent<T>.Deserialize, SimpleEvent<T>.OnEventRaised);
         }
 
         public static void RegisterEvent(string eventId, Func<object, string> serializeEventData, Func<string, object> deserializeEventData, Action<object> onEventReceived)
@@ -40,6 +40,11 @@ namespace Mache.Networking
             };
 
             eventData.Add(registration);
+        }
+
+        public static void RaiseEvent<T>(T payload) where T : SimpleEvent<T>
+        {
+            RaiseEvent(SimpleEvent<T>.GetEventID(), payload);
         }
 
         public static void RaiseEvent(string eventId, object payload)

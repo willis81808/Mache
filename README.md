@@ -72,8 +72,6 @@ For auto serialization create a class that extends `SimpleEvent<T>`, for example
 ```cs
 public class ExampleEvent : SimpleEvent<ExampleEvent>
 {
-    public static string Id { get; private set; } = "Mache.Networking.SimpleTestEvent";
-
     public string Message { get; set; }
     public int MessageCount { get; set; }
 
@@ -89,7 +87,7 @@ public class ExampleEvent : SimpleEvent<ExampleEvent>
 ```
 Then register it with **Mache**:
 ```cs
-EventDispatcher.RegisterEvent<ExampleEvent>(ExampleEvent.Id);
+EventDispatcher.RegisterEvent<ExampleEvent>();
 ```
 
 #### Pros:
@@ -118,7 +116,7 @@ EventDispatcher.RegisterEvent("Some.Unique.Event.Id", SomeEvent.Serialize, SomeE
 ## Raising Network Events
 Events can be raised anywhere and sent to all clients. Using the `ExampleEvent` from above:
 ```cs
-EventDispatcher.RaiseEvent(ExampleEvent.Id, new ExampleEvent
+EventDispatcher.RaiseEvent(new ExampleEvent
 {
     Message = "Hello World!",
     MessageCount = 10

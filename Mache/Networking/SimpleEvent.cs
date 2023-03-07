@@ -13,6 +13,11 @@ namespace Mache.Networking
     {
         public abstract void OnReceived();
 
+        public static string GetEventID()
+        {
+            return $"{typeof(T).Assembly.FullName}.{typeof(T).FullName}";
+        }
+
         public static void OnEventRaised(object evnt)
         {
             ((SimpleEvent<T>)evnt).OnReceived();

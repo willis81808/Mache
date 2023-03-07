@@ -153,10 +153,8 @@ namespace Mache.UI
             var anchors = MenuAnchorsConfig.Value;
             Rect.anchorMin = new Vector2(anchors.x, anchors.y);
             Rect.anchorMax = new Vector2(anchors.z, anchors.w);
-            MachePlugin.Instance.Log.LogInfo("Applying save state anchors: " + anchors.ToString());
 
             UIRoot.transform.localPosition = MenuPositionConfig.Value;
-            MachePlugin.Instance.Log.LogInfo("Applying save state position: " + MenuPositionConfig.Value.ToString());
 
             EnsureValidPosition();
             EnsureValidSize();

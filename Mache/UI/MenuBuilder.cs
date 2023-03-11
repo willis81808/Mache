@@ -242,6 +242,7 @@ namespace Mache.UI
             var toggleObj = UIFactory.CreateToggle(toggleHolder, "toggle", out var toggleObject, out _);
             UIFactory.SetLayoutElement(toggleObj, minHeight: 30);
             ToggleObject = toggleObject;
+            ToggleObject.Set(DefaultValue, false);
             ToggleObject.onValueChanged.AddListener((val) => OnValueChanged?.Invoke(this, val));
 
             return toggleHolder;

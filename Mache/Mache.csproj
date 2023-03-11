@@ -58,6 +58,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\AppData\Roaming\Thunderstore Mod Manager\DataFolder\SonsOfTheForest\profiles\Testing\BepInEx\interop\bolt.user.dll</HintPath>
     </Reference>
+    <Reference Include="BulletBallistics, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="Endnight, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\AppData\Roaming\Thunderstore Mod Manager\DataFolder\SonsOfTheForest\profiles\Testing\BepInEx\interop\Endnight.dll</HintPath>
@@ -474,8 +475,9 @@
     <Reference Include="UnityEngine.XRModule">
       <HintPath>..\..\..\..\AppData\Roaming\Thunderstore Mod Manager\DataFolder\SonsOfTheForest\profiles\Testing\BepInEx\interop\UnityEngine.XRModule.dll</HintPath>
     </Reference>
-    <Reference Include="UniverseLib.IL2CPP.Interop">
-      <HintPath>..\Libs\UniverseLib.IL2CPP.Interop.dll</HintPath>
+    <Reference Include="UniverseLib.IL2CPP.Interop, Version=1.5.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\AppData\Roaming\Thunderstore Mod Manager\DataFolder\SonsOfTheForest\profiles\Testing\BepInEx\plugins\willis81808-Mache\UniverseLib.IL2CPP.Interop.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

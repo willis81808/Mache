@@ -1,29 +1,18 @@
 ﻿using System.Linq;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using BepInEx;
 using BepInEx.Unity.IL2CPP;
-using BepInEx.Unity.IL2CPP.Utils.Collections;
 using Il2CppInterop.Runtime;
 using UniverseLib;
-using Sons.Items.Core;
-using Sons.Inventory;
-using Sons.Gameplay;
-using TheForest.Items.Inventory;
-using TheForest.Modding.Bridge;
 using UniverseLib.UI;
 using Mache.UI;
-using Mache.Utils;
 using System;
 using System.IO;
 using System.Text;
-using Sons.Input;
 using Mache.Networking;
-using TheForest.Utils;
 using BepInEx.Configuration;
-using Il2CppInterop.Runtime.Injection;
-using Endnight.Types;
+using BepInEx.Logging;
 
 namespace Mache
 {
@@ -33,7 +22,9 @@ namespace Mache
     {
         public const string ModId = "com.willis.sotf.mache";
         public const string ModName = "Mache";
-        public const string Version = "0.1.4";
+        public const string Version = "0.2.0";
+
+        public static ManualLogSource Logger => Instance.Log;
 
         internal static MachePlugin Instance { get; private set; }
 
@@ -75,12 +66,13 @@ namespace Mache
             // initialize UniverseLib
             UniverseLib.Config.UniverseLibConfig config = new UniverseLib.Config.UniverseLibConfig()
             {
+                Disable_Fallback_EventSystem_Search = true,
                 Allow_UI_Selection_Outside_UIBase = true,
                 Disable_EventSystem_Override = true,
                 Force_Unlock_Mouse = false,
                 Unhollowed_Modules_Folder = Path.Combine(Paths.BepInExRootPath, "interop"),
             };
-            Universe.Init(3f, UniverseInitialized, Log, config);
+            Universe.Init(0, UniverseInitialized, Log, config);
         }
 
         public void Start()
@@ -149,6 +141,7 @@ namespace Mache
                 Overlay.SetActive(false);
             }
         }
+
         private void UniverseInitialized()
         {
             var uiBase = UniversalUI.RegisterUI(MachePlugin.ModId, MacheMenuUpdate);
